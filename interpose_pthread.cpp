@@ -8,7 +8,7 @@
 #include <condition_variable>
 #include <thread>
 //To get the different parameter types
-#include <bits/pthreadtypes.h> //get param types
+#include <bits/pthreadtypes.h>
 //For va_list
 #include <stdarg.h> 
 
@@ -17,13 +17,13 @@
 #define LOG "mutex_usage.log"
 
 extern "C" {
-	thread_local bool use_real_func = false;
+	thread_local bool real_function = false;
 	
 	static std::ofstream* ofs;
 	static ConcMap *cache;
 
 	__attribute__((constructor)) void init(void) { 
-		use_real_func = true;
+		real_function = true;
 		ofs = new std::ofstream();
 		if(ofs == NULL) {
 			perror("The constructor was not set");
@@ -33,11 +33,11 @@ extern "C" {
 
 		//initializes Hash Map 
 		cache = new ConcMap();
-		use_real_func = false;
+		real_function = false;
 	}
 
 	__attribute__((destructor))  void fini(void) { 
-		use_real_func=true;
+		real_function = true;
 		ofs->close();
 		delete ofs;
 		delete cache;
@@ -45,11 +45,11 @@ extern "C" {
 
 	void log_func(const char* func_name, const char * format=NULL ...){
     // If we should use real func, no op
-		if(use_real_func == false) {
+		if(real_function == false) {
 			if(!ofs) {
 				init();
 			}
-			use_real_func = true;
+			real_function = true;
 			(*ofs) << "(0) " << func_name;
 			if(format) {
 				char buffer[256];
@@ -61,7 +61,7 @@ extern "C" {
 			(*ofs) << "\n";
 			my_backtrace(ofs,cache);
 			(*ofs) <<"\n";
-			use_real_func = false;
+			real_function = false;
 		}
 	}
 
