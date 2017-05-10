@@ -11,7 +11,7 @@ mnist = input_data.read_data_sets("/tmp/data/", one_hot=True)
 Xtr, Ytr = mnist.train.next_batch(5000) #5000 for training (nn candidates)
 Xte, Yte = mnist.test.next_batch(200) #200 for testing
 
-# tf Graph Input
+#The TensorFlow Graph Input
 xtr = tf.placeholder("float", [None, 784])
 xte = tf.placeholder("float", [784])
 
@@ -37,6 +37,5 @@ for i in range(len(Xte)):
     # Calculate accuracy
     if np.argmax(Ytr[nn_index]) == np.argmax(Yte[i]):
         accuracy += 1./len(Xte)
-
 print("Done!")
-print("Accuracy:", accuracy)
+print("Accuracy score:", accuracy)
