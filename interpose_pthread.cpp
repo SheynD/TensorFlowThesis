@@ -31,7 +31,7 @@ extern "C" {
 		}
 		ofs->open(LOG, std::ofstream::out | std::ofstream::app);
 
-		//initializes Hash Map 
+		//Initializes the the hash map 
 		cache = new ConcMap();
 		real_function = false;
 	}
